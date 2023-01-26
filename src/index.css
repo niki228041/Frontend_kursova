@@ -1,0 +1,49 @@
+@font-face {
+    font-family: CreatoDisplay;
+    src: url('./fonts/CreatoDisplay-ExtraBold.otf');
+}
+
+@font-face {
+    font-family: CreatoDisplay_Medium;
+    src: url('./fonts/CreatoDisplay-Medium.otf');
+}
+
+body{
+    font-family: CreatoDisplay;
+    background-color: #d9d9d9;
+}
+
+.mediumFont{
+    font-family: CreatoDisplay_Medium;
+}
+
+
+.ava_background{
+    background-image:url("./images/omoriSad.png");
+    background-position: center;
+    background-size: 200px;
+}
+
+.backgroundMainImage{
+    background-image:url("./images/omoriSad.png");
+    background-position: center;
+}
+
+.background_search_bar{
+    background-image:url("./images/Layer\ 24.png");
+    background-size: 1700px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.text_overflow{
+    text-overflow: ellipsis;
+  overflow: hidden; 
+  width: 160px; 
+  height: 1.2em; 
+  white-space: nowrap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
