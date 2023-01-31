@@ -2,12 +2,18 @@ import React from 'react';
 import Star from '../images/star.png';
 import Car from '../images/lamborginy.png';
 import ShopCart from "../images/shopping_cart.png";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const ModelUnit=(background:string,count_of_stars:number,number_of_recall:number,procent_of_sell:number = 0)=>{
 
-    let stars = []
+    let stars = [];
+    var navigate = useNavigate(); 
+
+    const routeChange = (path:string) =>{ 
+        window.scroll({top: 0, left: 0, behavior: 'smooth' })
+        navigate(path);
+      }
 
     for (let index = 0; index < count_of_stars; index++) {
         stars.push(<img key={index} src={Star} className='h-5'/>);
@@ -16,9 +22,9 @@ const ModelUnit=(background:string,count_of_stars:number,number_of_recall:number
 
     return(
         <div className='h-[200px] w-[200px] rounded-[30px] grid grid-cols-1'>
-            <Link to="/model/adsasg">
+            <div onClick={()=>routeChange("/model/adsasg")} >
                 <div className=' cursor-pointer h-[150px] w-full rounded-[30px] hover:contrast-75 active:contrast-125 duration-75'  style={{ backgroundImage: `url(${Car})`,backgroundPosition:"center",backgroundSize:"cover"}}/>
-            </Link>
+            </div>
             
             {procent_of_sell > 0 ? 
             <div className='absolute h-7 w-14 bg-red-300 ml-44 flex items-center justify-center p-3 rounded-md text-red-700'>

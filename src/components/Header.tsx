@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import "../index.css"
 import logo from '../images/star_shape.png'
 import search from '../images/search_icon.png'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Header =()=> {
   var [openMenu,setOpenMenu] = useState(false);
@@ -10,16 +11,24 @@ const Header =()=> {
     setOpenMenu(!openMenu);
   }
 
+
+  let navigate = useNavigate(); 
+
+  const routeChange = (path:string) =>{ 
+    window.scroll({top: 0, left: 0, behavior: 'smooth' })
+    navigate(path);
+  }
+
   return (
     <div className="w-full bg-mainYellow h-14 flex-row flex place-content-between" >
         <img src={logo} className='p-2' />
 
         {openMenu ?
         <div className='absolute h-36 w-40 bg-mainYellow right-0 mt-14 rounded-bl-xl grid grid-cols-1 p-2'>
-          <div className='hover:bg-yellowForInputs hover:contrast-75 active:outline-2 active:bg-yellow-700 cursor-pointer bg-whiteYellow h-7 pl-3 rounded-full flex items-center text-[14px] text-fontYellowDark'>Profile</div>
-          <div className='hover:bg-yellowForInputs hover:contrast-75 active:outline-2 active:bg-yellow-700 cursor-pointer bg-whiteYellow h-7 pl-3 rounded-full flex items-center text-[14px] text-fontYellowDark'>Shop</div>
-          <div className='hover:bg-yellowForInputs hover:contrast-75 active:outline-2 active:bg-yellow-700 cursor-pointer bg-whiteYellow h-7 pl-3 rounded-full flex items-center text-[14px] text-fontYellowDark'>Settings</div>
-          <div className='hover:bg-yellowForInputs hover:contrast-75 active:outline-2 active:bg-yellow-700 cursor-pointer bg-whiteYellow h-7 pl-3 rounded-full flex items-center text-[14px] text-fontYellowDark'>Log Out</div>
+          <div onClick={()=>routeChange("/profile")} className='hover:bg-yellowForInputs hover:contrast-75 active:outline-2 active:bg-yellow-700 cursor-pointer bg-whiteYellow h-7 pl-3 rounded-full flex items-center text-[14px] text-fontYellowDark'>Profile</div>
+          <div  onClick={()=>routeChange("/models")} className='hover:bg-yellowForInputs hover:contrast-75 active:outline-2 active:bg-yellow-700 cursor-pointer bg-whiteYellow h-7 pl-3 rounded-full flex items-center text-[14px] text-fontYellowDark'>Shop</div>
+          <div  onClick={()=>routeChange("/setting")} className='hover:bg-yellowForInputs hover:contrast-75 active:outline-2 active:bg-yellow-700 cursor-pointer bg-whiteYellow h-7 pl-3 rounded-full flex items-center text-[14px] text-fontYellowDark'>Settings</div>
+          <div  onClick={()=>routeChange("/login")} className='hover:bg-yellowForInputs hover:contrast-75 active:outline-2 active:bg-yellow-700 cursor-pointer bg-whiteYellow h-7 pl-3 rounded-full flex items-center text-[14px] text-fontYellowDark'>Log Out</div>
         </div>
         :""}
         

@@ -10,7 +10,9 @@ import Model from './components/Model';
 import Login from './components/Auth/Login';
 import { Route,Router,Routes,BrowserRouter,Outlet} from 'react-router-dom';
 import { RouterProvider } from 'react-router';
-import { GoogleOAuthProvider ,GoogleLogin } from '@react-oauth/google';
+import { Provider } from 'react-redux';
+import { store } from './app/store';
+import Registration from './components/Auth/Registration';
 
 
 const root = ReactDOM.createRoot(
@@ -19,35 +21,31 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path='/*' element={
-          <>
-          <Header/>
-          <Outlet/>
-          <Footer/>
-          </>
-        }>
-          
-        <Route path="models" element={<><BackgroundMainImage/><SearchBar/><Models/></>}>
-        </Route>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Routes>
+            <Route path='/*' element={
+              <>
+              <Header/>
+              <Outlet/>
+              <Footer/>
+              </>
+            }>
+            
+              <Route path="models" element={<><BackgroundMainImage/><SearchBar/><Models/></>}>
+              </Route>
+
+              <Route path="model/:userId" element={<Model/>} />
+              <Route path="login" element={<><Login/></>}/>
+              <Route path='registration' element={<Registration/>}/>
         
-        <Route path="model/:userId" element={<Model/>} />
-        <Route path="login" element={<>
-        <GoogleOAuthProvider clientId="1077056982647-chirn7dlqjl0ru51a94d4sjt385tc3gi.apps.googleusercontent.com">
-          <Login/>
-        </GoogleOAuthProvider>
-        </>
-        }>
-
-        </Route>
-
-
-        </Route>
-
-      </Routes>
-      
-    </BrowserRouter>
+        
+            </Route>
+        
+        </Routes>
+        
+      </BrowserRouter>
+    </Provider>
     
   </React.StrictMode>
 );
