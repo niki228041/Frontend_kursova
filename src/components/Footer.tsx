@@ -1,9 +1,10 @@
 import React from 'react'
 import logo from '../images/star_shape.png'
+import "../index.css"
 
 const Footer=()=> {
   return (
-    <div className=' bg-mainYellow w-full mt-36 grid grid-cols-8 p-5 pr-24 pl-24'>
+    <div className=' bg-mainYellow w-full mt-36 grid grid-cols-8 p-5 pr-24 pl-24 footer'>
         <div className='h-36 w-full rounded-full flex flex-auto'>
             <img className='m-auto ' src={logo}></img>
         </div>

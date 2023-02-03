@@ -9,9 +9,12 @@
 }
 
 body{
-    font-family: CreatoDisplay;
+    /* font-family: CreatoDisplay; */
     background-color: #d9d9d9;
+    width: 100%;
+    display: flex;
 }
+
 
 .mediumFont{
     font-family: CreatoDisplay_Medium;

@@ -8,6 +8,9 @@ import Button_Like from '../images/LikeButton.png'
 import Button_Like_On from '../images/heart_on.png'
 import SeeMoreDetailsButton from '../images/SeeMoreDetails.png'
 import Arrow from '../images/link-arrow.png'
+import { useGetProductByIdQuery } from '../features/user/apiProductSlice';
+import { useParams} from 'react-router-dom'
+
 
 const smollAnvertising=()=>{
   return(
@@ -36,6 +39,15 @@ const Model =()=> {
   var [ButtonLikeOption,setButtonLikeOption] = useState(Button_Like);
   var [ChoisedPreviewOption,setChoisedPreviewOption] = useState("#8f8f8f");
 
+
+  const params = useParams();
+
+  const {data,isSuccess} = useGetProductByIdQuery({id:params.modelId});
+
+  console.log(data);
+
+
+
   const handleLikeOption=(withOption:boolean)=>{
     if(withOption)
     {
@@ -62,7 +74,7 @@ const Model =()=> {
   return (
     <div className=' w-full p-10 pl-16 pr-16 grid grid-cols-10 gap-y-0  text-grayFont'>
         <div className=' w-full h-10 col-span-10'>
-          Home | 3D | Name of this project
+          Home | 3D | {data?.name}
         </div>
         <div className='w-full h-full col-span-6 p-5 pl-8 pr-3'>
             <div className=' h-[550px] w-full rounded-xl' style={{backgroundImage: `url(${Car})`,backgroundSize:"cover",backgroundPosition:"center"}}>
@@ -169,31 +181,32 @@ const Model =()=> {
         <div className=' w-full h-full col-span-4 p-5 pl-3 pr-8'>
           <div className=' w-full rounded-xlgrid grid-cols-1' >
             <div className='w-full h-10 rounded-xl ' >
-                <span className='text-[27px] overflow-hidden whitespace-nowrap' >Name of the model z.B Car Laborginy Primium Edition</span>
+                <span className='text-[27px] overflow-hidden whitespace-nowrap' >{data?.name}</span>
             </div>
 
             <div className='w-full h-16 rounded-xl flex items-center' >
               <div className=' bg-black rounded-full h-14 w-14 mr-3'>
 
               </div>
-              <span className=''>uishjro</span>
+              <span className=''>{data?.userId}</span>
             </div>
 
             <div className='w-full h-10 rounded-xl  flex place-content-between' >
               <div className='flex items-center pl-1'>
+                {data?.stars}
                 <img className='h-5 pr-1' src={Star}></img>
                 <img className='h-5' src={Star}></img>
               </div>
 
               <div className='flex items-center pl-1 text-[20px]'>
-                {125} Likes
+              {data?.likes} Likes
               </div>
 
             </div>
 
             <div className='w-full h-16 rounded-xl ' >
               <div className='flex place-content-between'>
-                <span className='text-[29px]'>20,99$</span>
+                <span className='text-[29px]'>{data?.price}$</span>
                 <div className=' bg-red-400 rounded-xl pr-2 pl-2'>
                   <span className='text-[29px]'>-44%</span>
                 </div>
@@ -212,11 +225,11 @@ const Model =()=> {
 
             <div className='w-full h-56 rounded-xl p-2' >
               <span className='text-[24px]'>General Information</span>
-              <div className=' flex place-content-between  pt-2'><span>File Size</span> <span className='mediumFont'>332,41 MB</span></div>
-              <div className=' flex place-content-between  pt-2'><span>Upload Date</span> <span className='mediumFont'>22.02.2005 </span></div>
-              <div className=' flex place-content-between  pt-2'><span>Created In</span> <span className='mediumFont'>Blender, Photoshop</span></div>
-              <div className=' flex place-content-between  pt-2'><span>Extension</span> <span className='mediumFont'>FBX</span></div>
-              <div className=' flex place-content-between  pt-2'><span>License type</span> <span className='mediumFont'>Super Cool</span></div>
+              <div className=' flex place-content-between  pt-2'><span>File Size</span> <span className='mediumFont'>{data?.size}</span></div>
+              <div className=' flex place-content-between  pt-2'><span>Upload Date</span> <span className='mediumFont'>{data?.extension}</span></div>
+              <div className=' flex place-content-between  pt-2'><span>Created In</span> <span className='mediumFont'>{data?.inWhichPrograms}</span></div>
+              <div className=' flex place-content-between  pt-2'><span>Extension</span> <span className='mediumFont'>{data?.uploadDate}</span></div>
+              <div className=' flex place-content-between  pt-2'><span>License type</span> <span className='mediumFont'>{data?.licenseType}</span></div>
             </div>
 
             <div className='w-full'>

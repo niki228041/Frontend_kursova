@@ -62,6 +62,9 @@ export const postRegistration:any = createAsyncThunk('/User/Register',async(date
 })
 
 
+
+
+
 export const AuthUser:any = createAsyncThunk('',(token:string)=>{
     var decodedToken = "";
     if(token != "")
@@ -110,7 +113,7 @@ const userSlice = createSlice(
                 state.user = parseJwt(action.payload);
 
 
-                console.log(action);
+                console.log(state);
                 
 
             })
@@ -143,8 +146,16 @@ const userSlice = createSlice(
             })
             .addCase(postRegistration.fulfilled,(state,action)=>{
                 state.loading = false;
-                
 
+                state.accessToken = action.payload;
+                // state.refreshToken = action.payload.refreshToken;
+
+                SetAccessToken(action.payload);
+                // SetRefreshToken(action.payload.refreshToken);
+
+                state.user = parseJwt(action.payload);
+
+                state.isAuth = true;
                 // state.accessToken = action.payload.accessToken;
                 // // state.refreshToken = action.payload.refreshToken;
 
@@ -162,16 +173,15 @@ const userSlice = createSlice(
                 // (state.refreshToken);
             })
             .addCase(AuthUser.fulfilled,(state,action)=>{
-                // if(action.payload == "")
-                // {
-                //     state.isAuth = false;
-                // }
-                // else
-                // {
-                //     state.isAuth = true;
-                // }
-                // (action);
-                // state.user = action.payload;
+                if(action.payload == "")
+                {
+                    state.isAuth = false;
+                }
+                else
+                {
+                    state.isAuth = true;
+                }
+                state.user = action.payload;
             })
     }
 });

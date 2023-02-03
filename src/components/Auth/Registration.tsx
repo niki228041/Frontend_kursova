@@ -59,7 +59,7 @@ const Registration = () => {
 
           <div className='rounded-full flex flex-col mb-4 w-full lg:pl-3'>
             <span>Email</span>
-            <input className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3' />
+            <input type="email" className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3' />
           </div>
         </div>
         
@@ -79,12 +79,12 @@ const Registration = () => {
         <div className='max-lg:grid grid-cols-1 lg:flex place-content-between'>
           <div className='rounded-full flex flex-col mb-4 w-full lg:pr-3'>
             <span>Password</span>
-            <input className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3' />
+            <input type="password" className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3' />
           </div>
 
           <div className='rounded-full flex flex-col mb-4 w-full lg:pl-3'>
             <span>Confirm Password</span>
-            <input className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3' />
+            <input type="password" className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3' />
           </div>
         </div>
 

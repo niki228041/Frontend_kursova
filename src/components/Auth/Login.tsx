@@ -1,16 +1,20 @@
 import React, { useEffect } from 'react'
 import {googleLogin,login} from "../../features/user/user-slice";
 import { IRequestToGoogleLogin } from "./types";
-import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import { ILogin } from './types';
-
-
+import Toastify from 'toastify-js'
+import "toastify-js/src/toastify.css"
 
 
 const Login = () => {
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const user:any = useSelector((state:any)=>state.user);
+
 
 
     const handleLoginWithGoogleSuccess=(res:any)=>{
@@ -19,6 +23,7 @@ const Login = () => {
 
       console.log(requestLogin);
       dispatch(googleLogin(requestLogin));
+      navigate("/models");
     }
 
     const handleLogin=(data:React.FormEvent<HTMLFormElement>)=>{
@@ -32,10 +37,13 @@ const Login = () => {
 
       console.log(loginRequest);
       dispatch(login(loginRequest));
+      navigate("/models");
     }
 
 
     useEffect(() => {
+
+      console.log('i fire once');
         let clientId = "1077056982647-chirn7dlqjl0ru51a94d4sjt385tc3gi.apps.googleusercontent.com";
 
         if (typeof window === "undefined" || !window.google) {
@@ -51,6 +59,7 @@ const Login = () => {
         window.google.accounts!.id.renderButton(document.getElementById("loginGoogleBtn")!,
           opts);
         
+        
       }, []);
 
 
@@ -64,12 +73,12 @@ const Login = () => {
           </div>
           <div className=' rounded-full flex flex-col mb-4'>
             <span>Email</span>
-            <input name='Email' id="Email" className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3' />
+            <input name='Email' id="Email" type="email" className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3' />
           </div>
 
           <div className=' rounded-full flex flex-col mb-4'>
             <span>Password</span>
-            <input name='Password' id="Password" className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3' />
+            <input name='Password' id="Password" type="password" className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3' />
           </div>
 
           <div className=' rounded-full place-content-between mb-4 max-lg:grid grid-cols-1 lg:flex '>
