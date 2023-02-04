@@ -52,9 +52,9 @@ export const login:any = createAsyncThunk('/api/Account/login',async(dateFromFro
     }
 })
 
-export const postRegistration:any = createAsyncThunk('/User/Register',async(dateFromFrontend:any)=>{
+export const postRegistration:any = createAsyncThunk('/api/Account/registration',async(dateFromFrontend:any)=>{
     try{
-        const response = await axios.post(baseURL + '/User/Register',dateFromFrontend);
+        const response = await axios.post(baseURL + '/api/Account/registration',dateFromFrontend);
         return response.data;
     }catch(err:any){
         return err.message;

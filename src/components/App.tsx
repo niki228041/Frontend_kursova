@@ -7,7 +7,7 @@ import Models from './Models';
 import Footer from './Footer';
 import Model from './Model';
 import Login from './Auth/Login';
-import { Route,Router,Routes,BrowserRouter,Outlet} from 'react-router-dom';
+import { Route,Router,Routes,BrowserRouter,Outlet, Link} from 'react-router-dom';
 import { RouterProvider } from 'react-router';
 import Registration from './Auth/Registration';
 import LoadedUserAssets from './LoadedUserAssets';
@@ -61,6 +61,18 @@ const App=()=>{
             ""}
               <Route path="login" element={<><Login/></>}/>
               <Route path='registration' element={<Registration/>}/>
+
+              <Route path='*' element={
+              <>
+              <div className='flex flex-col items-center mt-11' style={{minHeight:"100vh"}}>
+                <span className="text-[60px] mb-10">Page not found</span>
+                <Link to="/login" className='text-[30px] bg-whiteYellow rounded-full shadow-xl min-h-[25px]justify-center items-center pt-3 pb-3 pl-7 pr-7 hover:contrast-150 active:contrast-50 duration-200'>
+                  Back to Login
+                </Link>
+              </div>
+              
+              </>
+            }></Route>
               
         
             </Route>

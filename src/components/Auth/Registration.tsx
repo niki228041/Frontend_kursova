@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react'
-import {googleLogin} from "../../features/user/user-slice";
+import {googleLogin, postRegistration} from "../../features/user/user-slice";
 import { IRequestToGoogleLogin } from "./types";
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { IRegistration } from './types';
 
 
 
 const Registration = () => {
 
     const dispatch = useDispatch();
-
+    const navigate = useNavigate();
 
     const handleLoginWithGoogleSuccess=(res:any)=>{
       console.log("Login res:",res);
@@ -19,8 +20,28 @@ const Registration = () => {
       dispatch(googleLogin(requestLogin));
     }
 
+    const handleRegister=(data:React.FormEvent<HTMLFormElement>)=>{
+      data.preventDefault();
+      var curentData = new FormData(data.currentTarget);
+      
+      var email = curentData?.get("email")?.toString()!;
+      var password = curentData?.get("password")?.toString()!;
+      var rep_password = curentData?.get("rep_password")?.toString()!;
+      var username = curentData?.get("username")?.toString()!;
+      var name = curentData?.get("name")?.toString()!;
+      var surname = curentData?.get("surname")?.toString()!;
+
+      var e:any = document.getElementById("role");
+      var role = e.value;
+
+      var regRequest:IRegistration = {email:email,password:password,userName:username,name:name,surname:surname,role:role};
+
+      console.log(regRequest);
+      dispatch(postRegistration(regRequest));
+      navigate("/models");
+    }
+
     const handleGoogleLoginButtonAction=()=>{
-      console.log("df");
       document.getElementById("loginGoogleBtn")?.click();
     }
 
@@ -45,7 +66,7 @@ const Registration = () => {
 
   return (
     <>
-
+      <form onSubmit={handleRegister}>
       <div className='bg-mainYellow grid grid-cols-1 xl:w-[750px] sm:w-[550px] m-auto rounded-xl text-fontYellowDark p-7 mt-28'>
         <div className='rounded-full text-[35px] mb-5 m-auto'>
           Sign Up
@@ -54,12 +75,12 @@ const Registration = () => {
         <div className='max-lg:grid grid-cols-1 lg:flex place-content-between'>
           <div className='rounded-full flex flex-col mb-4 w-full lg:pr-3'>
             <span>UserName</span>
-            <input className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3' />
+            <input id='username' name='username' className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3' />
           </div>
 
           <div className='rounded-full flex flex-col mb-4 w-full lg:pl-3'>
             <span>Email</span>
-            <input type="email" className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3' />
+            <input id='email' name='email' className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3' />
           </div>
         </div>
         
@@ -67,35 +88,36 @@ const Registration = () => {
         <div className='max-lg:grid grid-cols-1 lg:flex place-content-between'>
           <div className='rounded-full flex flex-col mb-4 w-full lg:pr-3'>
             <span>Name</span>
-            <input className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3' />
+            <input id='name' name='name' className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3' />
           </div>
 
           <div className='rounded-full flex flex-col mb-4 w-full lg:pl-3'>
             <span>Surname</span>
-            <input className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3' />
+            <input id='surname' name='surname' className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3' />
           </div>
         </div>
 
         <div className='max-lg:grid grid-cols-1 lg:flex place-content-between'>
           <div className='rounded-full flex flex-col mb-4 w-full lg:pr-3'>
             <span>Password</span>
-            <input type="password" className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3' />
+            <input type="password" id='password' name='password' className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3' />
           </div>
 
           <div className='rounded-full flex flex-col mb-4 w-full lg:pl-3'>
             <span>Confirm Password</span>
-            <input type="password" className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3' />
+            <input type="password" id='rep_password' name='rep_password' className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3' />
           </div>
         </div>
 
         <div className='rounded-full flex flex-col mb-4 w-28 pr-3'>
           <span>Role</span>
-          <select className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3'>
+          <select id='role' name='role' className=' bg-yellowForInputs text-[15px] mediumFont outline-none rounded-full h-10 pl-3 pr-3'>
             <option>-</option>
-            <option>Admin</option>
-            <option>User</option>
+            <option value="admin" >Admin</option>
+            <option value="user" >User</option>
           </select>
         </div>
+        
 
         <div className=' rounded-full place-content-between mb-4 max-lg:grid grid-cols-1 lg:flex '>
           
@@ -119,6 +141,7 @@ const Registration = () => {
         </div>
 
       </div>
+      </form>
 
       {/* <GoogleLogin
         onSuccess={credentialResponse => {
