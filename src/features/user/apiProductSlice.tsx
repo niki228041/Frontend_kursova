@@ -10,7 +10,7 @@ export const apiProductSlice:any = createApi({
         getProducts:builder.query<any,any>({
           query:(todo)=>({
             url:'/api/Products/AllProduct',
-            method:"GET",
+            method:"POST",
             body:todo
           }),
           providesTags:result=>['Products']
@@ -38,10 +38,73 @@ export const apiProductSlice:any = createApi({
             body:todo
           }),
           providesTags:result=>['Products']
+        }),
+        getProductByUserId:builder.query<any,any>({
+          query:(todo)=>({
+            url:"/api/Products/GetProductByUserId",
+            method:"POST",
+            body:todo
+          }),
+          providesTags:result=>['Products']
+        }),
+        CreateProductMessage:builder.mutation<any,any>({
+          query:(todo)=>({
+            url:"api/Products/CreateNewProductMessage",
+            method:"POST",
+            body:todo
+          }),
+          invalidatesTags:['Products']
         })
+        ,
+        getAllProductMessageByProductId:builder.query<any,any>({
+          query:(todo)=>({
+            url:"api/Products/AllCommentByProductId",
+            method:"POST",
+            body:todo
+          }),
+          providesTags:result=>['Products']
+        })
+        ,
+        getImagesByProductId:builder.query<any,any>({
+          query:(todo)=>({
+            url:"api/Products/GetImagesByProductId",
+            method:"POST",
+            body:todo
+          }),
+          providesTags:result=>['Products']
+        })
+        ,
+        getFirstImages:builder.query<any,any>({
+          query:(todo)=>({
+            url:"api/Products/GetFirstImages",
+            method:"POST",
+            body:todo
+          }),
+          providesTags:result=>['Products']
+        })
+        ,
+        deleteProductById:builder.mutation<any,any>({
+          query:(todo)=>({
+            url:"api/Products/DeleteProductById",
+            method:"POST",
+            body:todo
+          }),
+          invalidatesTags:['Products']
+        })
+        ,
+        getAssetByProductId:builder.mutation<any,any>({
+          query:(todo)=>({
+            url:"api/Products/GetAssetByProductId",
+            method:"POST",
+            body:todo
+          }),
+          invalidatesTags:['Products']
+        })
+        
     })
 })
 
 
-export const{useGetProductsQuery,useGetProductByIdQuery,useGetCompanysQuery} = apiProductSlice
+export const{useGetProductsQuery,useGetProductByIdQuery,useGetCompanysQuery,useGetAllProductMessageByProductIdQuery,useGetProductByUserIdQuery,useGetImagesByProductIdQuery,
+             useGetFirstImagesQuery} = apiProductSlice
 

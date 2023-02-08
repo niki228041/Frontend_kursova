@@ -15,6 +15,11 @@ body{
     display: flex;
 }
 
+.swiper {
+    width: 600px;
+    height: 300px;
+  }
+
 
 .mediumFont{
     font-family: CreatoDisplay_Medium;
@@ -46,6 +51,12 @@ body{
   height: 1.2em; 
   white-space: nowrap;
 }
+
+.image-container {
+    -webkit-transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
+  }
 
 @tailwind base;
 @tailwind components;

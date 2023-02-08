@@ -8,8 +8,24 @@ import Button_Like from '../images/LikeButton.png'
 import Button_Like_On from '../images/heart_on.png'
 import SeeMoreDetailsButton from '../images/SeeMoreDetails.png'
 import Arrow from '../images/link-arrow.png'
-import { useGetProductByIdQuery } from '../features/user/apiProductSlice';
+import { apiProductSlice, useGetProductByIdQuery,useGetAllProductMessageByProductIdQuery, useGetImagesByProductIdQuery } from '../features/user/apiProductSlice';
 import { useParams} from 'react-router-dom'
+import ava from '../images/omoriSad.png'
+import star from '../images/star__.png'
+import star_none from '../images/star_none.png'
+import { useSelector } from 'react-redux';
+import { useGetUserByEmailQuery } from '../features/user/apiUserSlice';
+
+// import Swiper core and required modules
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Virtual } from 'swiper';
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
 
 
 const smollAnvertising=()=>{
@@ -33,21 +49,72 @@ const smollAnvertising=()=>{
   )
 }
 
+const getStarsOfCount=(num:number)=>{
+  var stars = [];
+  for(var i=1;i<=num;i++)
+  {
+    stars.push(
+      <img key={i} className='h-4 mr-1 hover:contrast-75 image-container' src={star} />
+    );
+  }
+
+  return stars;
+}
+
+const messageModule=(message:any)=>{
+  console.log(message);
+
+  return(
+    <div key={message.id} className='flex items-center mt-4 '>
+      <div className=' bg-slate-100/[.30] pt-3 pb-6 rounded-md w-full flex '>
+        <img className=' h-14 rounded-full mr-3 ml-3' src={ava} />
+        <div>
+          <div className='flex text-[13px] items-center mb-[-10px]'>
+            <div className='pr-2'>niki228041</div>
+            <div>{message.dateCreated}</div>
+              <div className='pt-2 ml-2 flex pb-2 justify-between'>
+                <div className='flex rounded-full'>
+                  {
+                    getStarsOfCount(message.stars)
+                  }
+                </div>
+              </div>
+
+          </div>
+          <div className='flex'>
+            <div>{message.message}</div>
+          </div>
+          
+          
+
+        </div>
+
+      </div>
+    </div>
+  )
+}
+
 
 const Model =()=> {
 
   var [ButtonLikeOption,setButtonLikeOption] = useState(Button_Like);
   var [ChoisedPreviewOption,setChoisedPreviewOption] = useState("#8f8f8f");
 
+  var [stars,setStars] = useState(5);
+
+  var userEmail = useSelector((state:any)=>state.user.user.name);
+  var user = useGetUserByEmailQuery({email:userEmail});
 
   const params = useParams();
 
   const {data,isSuccess} = useGetProductByIdQuery({id:params.modelId});
-
-  console.log(data);
-
+  var {data:messages,isSuccess:isSuccessMessages} = useGetAllProductMessageByProductIdQuery({id:params.modelId});
 
 
+
+  const [createMessage,{}] = apiProductSlice.useCreateProductMessageMutation();
+  
+  var {data:images,isSuccess:isSuccessImages} = apiProductSlice.useGetImagesByProductIdQuery({id:params.modelId});
   const handleLikeOption=(withOption:boolean)=>{
     if(withOption)
     {
@@ -70,15 +137,66 @@ const Model =()=> {
     }
   }
 
+  const changeStars=(star_id:string)=>{
+
+    setStars(parseInt(star_id));
+
+    for(var i = 1;i<=5;i++){
+
+      var val:any = document.getElementById(i.toString());
+
+      if(i <= parseInt(star_id))
+      {
+        val.src = star;  
+      }
+      else
+      {
+        val.src = star_none;  
+      }
+      
+    }
+  }
+
+  const handleChangeSwiperImg=(it:number)=>{
+    var img = document.getElementById(it.toString());
+    var mainImg:any = document.getElementById("mainImg")
+    mainImg.style.backgroundImage = img?.style.backgroundImage;
+
+
+    console.log(it);
+  }
+
+
+
+  const handleCreateMessage=()=>{
+    var message:any = document.getElementById("message");
+    var new_message = {userId:user.data.id,productId:data.id,message:message?.value,stars:stars};
+    createMessage(new_message);
+  }
+
 
   return (
     <div className=' w-full p-10 pl-16 pr-16 grid grid-cols-10 gap-y-0  text-grayFont'>
         <div className=' w-full h-10 col-span-10'>
           Home | 3D | {data?.name}
         </div>
+
+        <div className=' w-full h-10 col-span-10 flex justify-center'>
+        </div>
+        
+
+
         <div className='w-full h-full col-span-6 p-5 pl-8 pr-3'>
-            <div className=' h-[550px] w-full rounded-xl' style={{backgroundImage: `url(${Car})`,backgroundSize:"cover",backgroundPosition:"center"}}>
+          {isSuccessImages && images[0]!=undefined ?
+            <div className=' h-[550px] w-full rounded-xl' id='mainImg' style={{backgroundImage: `url(${'data:image/gif;base64,'+ images[0].data})`,backgroundSize:"cover",backgroundPosition:"center"}}>
             </div>
+          :
+            <div className=' h-[550px] text-[30px] w-full rounded-xl flex justify-center items-center' style={{backgroundColor: "#8c8c8c"}}>
+              No image was found
+            </div>
+            
+          }
+
             <div className=' w-full h-7 flex justify-center items-center p-4'>
               <div className='bg-gray-500/[.56] rounded-full w-10 flex justify-center items-center'>
                 <span >1/2</span>
@@ -90,9 +208,26 @@ const Model =()=> {
                 <img className='h-4' src={Arrow} />
               </div>
 
-              <img className='h-28 pr-4 pl-4' src={Car_Low_Quality}/>
-              <img className='h-28 pr-4 pl-4' src={Car_Low_Quality}/>
-              <img className='h-28 pr-4 pl-4' src={Car_Low_Quality}/>
+              {isSuccessImages ?
+                <Swiper
+                // install Swiper modules
+                modules={[Navigation, Pagination, Scrollbar, A11y]}
+                spaceBetween={50}
+                slidesPerView={2}
+                onSwiper={(swiper) => console.log(swiper)}
+                onSlideChange={() => console.log('slide change')}
+                className='flex justify-center items-center h-full'
+              >
+                {images.map((img:any,it:number=0) => (
+                    <SwiperSlide key={it++} virtualIndex={it-1} className='flex justify-center items-center rounded-xl bg-slate-300 w-10'>
+                      <div onClick={()=>handleChangeSwiperImg(it-1)} id={(it).toString()} className='h-28 pr-4 pl-4 m-auto rounded-xl' style={{backgroundImage:'url(data:image/gif;base64,' + img.data +")" ,backgroundPosition:"center",backgroundSize:"cover"}}/>
+                    </SwiperSlide>
+                  ))}
+                ...
+              </Swiper>
+              :
+              ""}
+
               <div className='ml-10 hover:bg-gray-500/[.36] active:bg-gray-500/[.66] duration-200 p-4 rounded-full'>
                 <img className='h-4 rotate-180' src={Arrow} />
               </div>
@@ -239,9 +374,53 @@ const Model =()=> {
                 {smollAnvertising()}
               </div>
             </div>
+
+            
             
           </div>
         </div>
+
+        <div className='w-full col-span-10 '>
+          <div className=' bg-gray-600/[.25] w-full flex flex-col place-content-between p-3 gap-x-10 rounded-xl pb-7'>
+
+            {/* <div className=' bg-gray-200 w-full flex place-content-between p-3 items-center gap-x-10 rounded-xl pb-7'> */}
+
+            <div className='pt-2 flex pb-2 justify-between'>
+              <span>33 Comments</span>
+              <div className='bg-slate-400/[.56] p-2 flex rounded-full'>
+                <img onClick={()=>changeStars("1")} id='1' className='h-4 mr-1 hover:contrast-75 image-container' src={star} />
+                <img onClick={()=>changeStars("2")} id='2' className='h-4 mr-1 hover:contrast-75 image-container' src={star} />
+                <img onClick={()=>changeStars("3")} id='3' className='h-4 mr-1 hover:contrast-75 image-container' src={star} />
+                <img onClick={()=>changeStars("4")} id='4' className='h-4 mr-1 hover:contrast-75 image-container' src={star} />
+                <img onClick={()=>changeStars("5")} id='5' className='h-4 mr-1 hover:contrast-75 image-container' src={star} />
+              </div>
+            </div>
+
+            <div className='flex items-center'>
+              <img className='h-14 rounded-full  mr-3 ml-3' src={ava} />
+              <input name='message' id='message' className='w-full focus:contrast-125 bg-gray-100 text-[15px] h-10 rounded-xl outline-none pl-3 pr-3 duration-50'></input>
+            </div>
+            
+            
+
+            <div className='flex items-center mt-2 justify-end'>
+              <button onClick={()=>handleCreateMessage()} className=' bg-zinc-600 text-white rounded-full shadow-xl h-6 flex items-center justify-center p-5 pl-10 pr-10 hover:contrast-125 active:contrast-75 duration-50'>
+                Send
+              </button>
+            </div>
+
+            {/* messages */}
+
+            {isSuccessMessages ? messages.map((mes:any)=> messageModule(mes)) : " no one had write any messages hier"}
+
+
+            <div>
+
+            </div>
+
+          </div>
+        </div>
+
     </div>
   )
 }

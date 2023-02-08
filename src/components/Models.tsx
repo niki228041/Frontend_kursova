@@ -2,26 +2,34 @@ import Star from '../images/star.png';
 import Car from '../images/lamborginy.png';
 import ShopCart from "../images/shopping_cart.png";
 import { Link, useNavigate } from 'react-router-dom';
-import {apiProductSlice,useGetProductsQuery} from '../features/user/apiProductSlice'
+import {apiProductSlice,useGetFirstImagesQuery,useGetProductsQuery} from '../features/user/apiProductSlice'
+import { useSelector } from 'react-redux';
 
 
 
-const ModelUnit=(background:string,count_of_stars:number,number_of_recall:number,product_name:string,size:string,company:string, id:any, price:any, procent_of_sell:number = 0)=>{
+const ModelUnit=(background:string,count_of_stars:number,number_of_recall:number,product_name:string,size:string,company:string, id:any, price:any, procent_of_sell:number = 0,firstImages:any)=>{
 
     let stars = [];
-    console.log(id);
+    let img = firstImages.find((p:any)=>p.productId == id);
 
     let path = "/model/"+ id;
 
     for (let index = 0; index < count_of_stars; index++) {
         stars.push(<img key={index} src={Star} className='h-5'/>);
     }
-    
+
 
     return(
         <div key={id} className='h-[200px] w-[200px] rounded-[30px] grid grid-cols-1'>
             <Link to={path} onClick={()=>window.scroll({top: 0, left: 0, behavior: 'smooth' })} >
-                <div className=' cursor-pointer h-[150px] w-full rounded-[30px] hover:contrast-75 active:contrast-125 duration-75'  style={{ backgroundImage: `url(${Car})`,backgroundPosition:"center",backgroundSize:"cover"}}/>
+                {
+                    img != undefined?
+                    <div className=' cursor-pointer h-[150px] w-full rounded-[30px] hover:contrast-75 active:contrast-125 duration-75'  style={{ backgroundImage: `url(${'data:image/gif;base64,' + img.data})`,backgroundPosition:"center",backgroundSize:"cover"}}/>
+                    :
+                    <div className='text-[12px] flex justify-center items-center cursor-pointer h-[150px] w-full rounded-[30px] hover:contrast-75 active:contrast-125 duration-75'  style={{backgroundColor: "#8c8c8c"}}>
+                        No image was found
+                    </div>
+                }
             </Link>
             
             {procent_of_sell > 0 ? 
@@ -52,7 +60,15 @@ const ModelUnit=(background:string,count_of_stars:number,number_of_recall:number
 
 const Models=()=>{
   
-  const {data,isSuccess} = useGetProductsQuery();
+  var product:any = useSelector((state:any)=>state.product);
+  
+  var findBy = product.findBy;
+  
+  
+  const {data,isSuccess} = useGetProductsQuery({findBy:findBy});
+
+
+  const {data:firstImages,isSuccess:isSuccessFirstImages} = useGetFirstImagesQuery();
 
   return (
     <div className='flex flex-col '>
@@ -60,7 +76,7 @@ const Models=()=>{
 
             {/* grid */}
             <div className='grid lg:grid-cols-6 gap-x-16 gap-y-28 sm:grid-cols-3 mt-11'>
-                {isSuccess ? data?.map((a:any)=>{return ModelUnit("../images/start_shape.png",a.stars,0,a.name,a.size,a.companyId,a.id,a.price)}) :""}
+                {isSuccess && isSuccessFirstImages ? data?.map((a:any)=>{return ModelUnit("../images/start_shape.png",a.stars,0,a.name,a.size,a.companyId,a.id,a.price,0,firstImages)}) :""}
             </div>
 
 

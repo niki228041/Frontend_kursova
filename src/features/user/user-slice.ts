@@ -113,9 +113,6 @@ const userSlice = createSlice(
                 state.user = parseJwt(action.payload);
 
 
-                console.log(state);
-                
-
             })
             .addCase(login.pending,(state,action)=>{
                 state.loading = true
@@ -138,8 +135,6 @@ const userSlice = createSlice(
                 // (state.user);
                 // (state.accessToken);
                 // (state.refreshToken);
-
-                console.log(action);
             })
             .addCase(postRegistration.pending,(state,action)=>{
                 state.loading = true;

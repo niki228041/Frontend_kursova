@@ -27,4 +27,6 @@ export interface INewAsset{
     companyId: number,
     data:string,
     price:number,
+    version:string,
+    images_:any
 }
